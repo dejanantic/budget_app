@@ -1,0 +1,241 @@
+/******************************************************************************
+*
+*  BASE STUFF
+*
+******************************************************************************/
+
+:root {
+  --color-green: #2ecc71;
+  --color-red: #c0392b;
+  --color-background: #f7f7f7;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-button-purple: #6647ff;
+
+  --font-primary: "Roboto", "sans-serif";
+  --font-logo: "Pacifico", "sans-serif";
+  --font-size-default: 1.6rem;
+
+  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+
+* {
+  font-family: inherit;
+  font-size: var(--font-size-default);
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+  background: var(--color-background);
+  font-family: var(--font-primary);
+}
+
+.container {
+  max-width: 35rem;
+  height: 100vh;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  /* padding: 0 1.5rem; */
+}
+
+/******************************************************************************
+*
+*  TYPOGRAPHY
+*
+******************************************************************************/
+
+.heading-secondary {
+  font-size: 2rem;
+  text-transform: uppercase;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid #bbb;
+}
+
+/******************************************************************************
+*
+*  NAV
+*
+******************************************************************************/
+
+.nav {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  font-size: 4rem;
+  font-weight: 400;
+  font-family: var(--font-logo);
+  display: inline-block;
+}
+
+/******************************************************************************
+*
+*  OVERVIEW SECTION
+*
+******************************************************************************/
+
+.overview {
+  margin-bottom: 3rem;
+}
+
+.overview__balance {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.heading-secondary--overview {
+  padding: 0;
+  border-bottom: none;
+}
+
+.overview__currency {
+  display: inline-block;
+  font-size: inherit;
+  margin-left: 0.5rem;
+}
+
+.overview__breakdown {
+  width: 100%;
+  background: var(--color-white);
+  padding: 3rem 2rem;
+  display: flex;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: var(--box-shadow);
+}
+
+.overview__breakdown > * {
+  /* outline: 2px solid green; */
+  flex: 1;
+}
+
+.overview__breakdown > *:first-of-type {
+  border-right: 1px solid #dedede;
+}
+
+.overview__breakdown [class$="amount"] {
+  font-size: 2rem;
+  margin: 0.5rem 0;
+}
+
+.overview__income-amount {
+  color: var(--color-green);
+}
+
+.overview__expense-amount {
+  color: var(--color-red);
+}
+
+/******************************************************************************
+*
+*  ACTIVITY SECTION
+*
+******************************************************************************/
+
+.activity {
+  margin-bottom: 3rem;
+}
+
+.transactions-list {
+  list-style: none;
+  position: relative;
+}
+
+.transaction {
+  width: 100%;
+  display: flex;
+  margin: 1rem 0;
+  background: var(--color-white);
+  box-shadow: var(--box-shadow);
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  color: #333;
+  position: relative;
+  cursor: pointer;
+}
+
+.transaction--income {
+  border-right: 5px solid var(--color-green);
+}
+
+.transaction--expense {
+  border-right: 5px solid var(--color-red);
+}
+
+.transaction__date {
+  font-size: 1rem;
+  margin-top: 1px;
+}
+
+.transaction__delete {
+  text-decoration: none;
+  background: var(--color-red);
+  color: var(--color-white);
+  display: inline-block;
+  padding: 0 1rem;
+  font-size: 3rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  z-index: -1;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.transaction.js-clicked > :last-child {
+  left: -3.6rem;
+}
+
+/******************************************************************************
+*
+*  NEW TRANSACTION
+*
+******************************************************************************/
+
+.new-transaction .heading-secondary {
+  display: none;
+}
+
+.new-transaction__btn {
+  display: flex;
+  position: absolute;
+  bottom: 10vh;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  text-decoration: none;
+  background: var(--color-button-purple);
+  padding: 2rem;
+  border-radius: 50%;
+}
+
+.new-transaction__btn span {
+  font-size: 4rem;
+  color: var(--color-white);
+  transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.new-transaction__btn:hover span {
+  transform: rotate(180deg);
+}

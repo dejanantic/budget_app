@@ -5,10 +5,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget App - Keeping you atop of your personal finances</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <h1>hello world!</h1>
+    <section class="container">
+
+        <nav class="nav">
+
+            <h1 class="logo">Budget App</h1>
+
+        </nav>
+
+        <main>
+
+            <!-- Monthly overview -->
+            <section class="overview">
+
+                <h2 class="heading-secondary heading-secondary--overview">Your balance</h2>
+
+                <h1 class="overview__balance">0.00<span class="overview__currency">&euro;</span></h1>
+
+                <div class="overview__breakdown">
+
+                    <div class="overview__income">
+                        <h3 class="overview__income-heading">Income</h3>
+                        <p class="overview__income-amount">
+                            0.00<span class="overview__currency">&euro;</span>
+                        </p>
+                    </div>
+
+                    <div class="overview__expense">
+                        <h3 class="overview__expense-heading">Expense</h3>
+                        <p class="overview__expense-amount">
+                            0.00<span class="overview__currency">&euro;</span>
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Activity section -->
+            <section class="activity">
+
+                <h2 class="heading-secondary">Activity</h2>
+
+                <ul class="transactions-list">
+
+                    <li class="transaction transaction--income">
+
+                        <div class="transaction__group">
+                            <p class="transaction__description">Salary</p>
+                            <p class="transaction__date">24/02/2020</p>
+                        </div>
+                        <p class="transaction__amount">2500.00<span class="transaction__currency">&euro;</span></p>
+                        <a href="#" class="transaction__delete js-transaction-delete">&times;</a>
+
+                    </li>
+
+                    <li class="transaction transaction--expense js-clicked">
+
+                        <div class="transaction__group">
+                            <p class="transaction__description">iPhone</p>
+                            <p class="transaction__date">15/02/2020</p>
+                        </div>
+                        <p class="transaction__amount">-650.30<span class="transaction__currency">&euro;</span></p>
+                        <a href="#" class="transaction__delete js-transaction-delete">&times;</a>
+
+                    </li>
+                </ul>
+
+            </section>
+
+            <div class="new-transaction">
+
+                <h3 class="heading-secondary">Add new transaction</h3>
+
+                <a href="#" class="new-transaction__btn"><span>&plus;</span></a>
+
+            </div>
+        </main>
+
+    </section>
 </body>
 
 </html>

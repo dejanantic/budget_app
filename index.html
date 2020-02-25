@@ -25,21 +25,21 @@
 
                 <h2 class="heading-secondary heading-secondary--overview">Your balance</h2>
 
-                <h1 class="overview__balance">0.00<span class="overview__currency">&euro;</span></h1>
+                <h1 class="overview__balance">1849.70<span class="overview__currency">&euro;</span></h1>
 
                 <div class="overview__breakdown">
 
                     <div class="overview__income">
                         <h3 class="overview__income-heading">Income</h3>
                         <p class="overview__income-amount">
-                            0.00<span class="overview__currency">&euro;</span>
+                            2500.00<span class="overview__currency">&euro;</span>
                         </p>
                     </div>
 
                     <div class="overview__expense">
-                        <h3 class="overview__expense-heading">Expense</h3>
+                        <h3 class="overview__expense-heading">Expenses</h3>
                         <p class="overview__expense-amount">
-                            0.00<span class="overview__currency">&euro;</span>
+                            650.30<span class="overview__currency">&euro;</span>
                         </p>
                     </div>
 
@@ -79,13 +79,42 @@
 
             </section>
 
-            <div class="new-transaction">
+            <div class="new-transaction" id="new-transaction">
 
-                <h3 class="heading-secondary">Add new transaction</h3>
+                <div class="new-transaction__content">
 
-                <a href="#" class="new-transaction__btn"><span>&plus;</span></a>
+                    <form action="#" class="form">
+
+                        <h3 class="heading-secondary">Add new transaction</h3>
+
+                        <div class="form__group">
+                            <label for="description" class="form__label">Description</label>
+                            <input type="text" class="form__input" id="description" placeholder="e.g. Groceries" required>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="amount" class="form__label">Amount</label>
+                            <input type="number" class="form__input" id="amount" placeholder="- expense, + income" required>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="date" class="form__label">Date</label>
+                            <input type="date" id="date" value="02/25/2020" class="form__input" required>
+                        </div>
+
+                        <div class="form__group form__buttons">
+                            <a href="#" class="btn-discard">Discard</a>
+                            <button class="btn">Add transaction</button>
+                        </div>
+
+                    </form>
+
+                </div>
 
             </div>
+
+            <a href="#new-transaction" class="new-transaction__btn"><span>&plus;</span></a>
+
         </main>
 
     </section>

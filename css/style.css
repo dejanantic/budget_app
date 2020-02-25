@@ -48,7 +48,6 @@ body {
   margin-right: auto;
   margin-left: auto;
   position: relative;
-  /* padding: 0 1.5rem; */
 }
 
 /******************************************************************************
@@ -170,6 +169,7 @@ body {
   color: #333;
   position: relative;
   cursor: pointer;
+  /* z-index: 10; */
 }
 
 .transaction--income {
@@ -203,6 +203,7 @@ body {
 
 .transaction.js-clicked > :last-child {
   left: -3.6rem;
+  /* z-index: 1; */
 }
 
 /******************************************************************************
@@ -211,14 +212,111 @@ body {
 *
 ******************************************************************************/
 
-.new-transaction .heading-secondary {
-  display: none;
+.new-transaction {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  opacity: 0;
+  visibility: hidden;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  outline: 2px solid green;
+  z-index: 100;
+  transition: all 0.3s;
+}
+
+.new-transaction:target {
+  opacity: 1;
+  visibility: visible;
+}
+
+.new-transaction__content {
+  max-width: 35rem;
+  min-width: 31rem;
+  position: relative;
+  z-index: 200;
+  padding: 2rem;
+  background: var(--color-white);
+  transform: translateY(-100vh);
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s;
+}
+
+.new-transaction:target .new-transaction__content {
+  transform: translateY(0);
+}
+
+.new-transaction__content .heading-secondary {
+  padding-bottom: 1rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.form__group:first-of-type {
+  margin-top: 1.5rem;
+}
+
+.form__group:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.form__input {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 0.3rem;
+}
+
+.form__buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  text-transform: uppercase;
+  margin-top: 3rem;
+}
+
+.btn-discard:link,
+.btn-discard:visited {
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 700;
+  color: var(--color-red);
+  transition: color 0.3s;
+}
+
+/* Default button -- be used as a block */
+
+.btn {
+  /* clear default styles first */
+  text-decoration: none;
+  border: none;
+  background: none;
+
+  /* apply new styles */
+  text-transform: uppercase;
+  color: var(--color-white);
+  padding: 1rem 1.5rem;
+  background: var(--color-button-purple);
+  border-radius: 3px;
+  margin-left: 2rem;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(1px);
 }
 
 .new-transaction__btn {
   display: flex;
   position: absolute;
-  bottom: 10vh;
+  bottom: 4vh;
   right: 0;
   align-items: center;
   justify-content: center;

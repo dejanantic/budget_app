@@ -54,7 +54,7 @@
 
                 <ul class="transactions-list">
 
-                    <li class="transaction transaction--income">
+                    <li class="transaction transaction--income js-transaction" data-transaction-id="1">
 
                         <div class="transaction__group">
                             <p class="transaction__description">Salary</p>
@@ -65,7 +65,7 @@
 
                     </li>
 
-                    <li class="transaction transaction--expense js-clicked">
+                    <li class="transaction transaction--expense js-transaction" data-transaction-id="2">
 
                         <div class="transaction__group">
                             <p class="transaction__description">iPhone</p>
@@ -99,7 +99,7 @@
 
                         <div class="form__group">
                             <label for="date" class="form__label">Date</label>
-                            <input type="date" id="date" value="02/25/2020" class="form__input" required>
+                            <input type="date" id="date" value="2020-02-21" class="form__input" required>
                         </div>
 
                         <div class="form__group form__buttons">
@@ -118,6 +118,8 @@
         </main>
 
     </section>
+
+    <script src="./app.js"></script>
 </body>
 
 </html>

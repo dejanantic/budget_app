@@ -197,13 +197,17 @@ body {
   transform: translateY(-50%);
   left: 0;
   z-index: -1;
-  transition: all 0.3s ease-in-out;
+  transition: left 0.2s ease-in-out;
   cursor: pointer;
 }
 
-.transaction.js-clicked > :last-child {
+.transaction.js-active > :last-child {
   left: -3.6rem;
-  /* z-index: 1; */
+}
+
+/* Helper class to make the delete button clickable */
+.bring-to-front {
+  z-index: 1 !important;
 }
 
 /******************************************************************************

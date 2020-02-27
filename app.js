@@ -1,34 +1,28 @@
-// Toggle transaction remove button and make it clickable
+// Toggle .js-active, toggle also if clicking outside of an active transaction
+document.addEventListener('click', function toggleJsActive(e) {
 
-document.addEventListener('click', function toggleDeleteButton(e) {
+    if (e.target.closest('li.js-transaction')) {
 
-    // If an element is clicked and it's not a transaction element or its'
-    // child, return
-    if (!e.target.matches('.js-transaction') && !e.target.closest('LI')) return;
+        const TRANSACTION = e.target.closest('li');
 
-    let transaction = e.target.closest('LI');
-    let deleteBtn = transaction.children[transaction.children.length - 1];
+        TRANSACTION.classList.toggle('js-active');
 
-    // If another transaction already selected, toggle 'js-active' of the
-    // previous transaction
+        return;
+    }
 
-    transaction.classList.toggle('js-active');
-
-    // If deleteBtn is hidden, set deleteBtn's z-index to 1
-    if (!deleteBtn.classList.contains('bring-to-front')) {
-
-        // Run after 2ms because that's how long the transition lasts
-        setTimeout(() => {
-            deleteBtn.classList.toggle('bring-to-front')
-        }, 200);
-
-    };
-
-    // If deleteBtn is visible, set deleteBtn z-index to -1
-    if (deleteBtn.classList.contains('bring-to-front')) deleteBtn.classList.toggle('bring-to-front');
-
-    console.log('toggle ran');
-
+    resetTransactions();
 })
 
+/*****************************************************************************/
+/***********************   FUNCTION DECLARATIONS   ***************************/
+/*****************************************************************************/
+
+// Remove .js-active from transaction when clicking away
+function resetTransactions() {
+
+    const TRANSACTIONS = document.querySelectorAll('.js-transaction');
+
+    TRANSACTIONS.forEach(function (transaction) {
+        transaction.classList.remove('js-active');
+    });
 }

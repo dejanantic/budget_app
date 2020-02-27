@@ -11,7 +11,6 @@ document.addEventListener('click', function toggleDeleteButton(e) {
 
     // If another transaction already selected, toggle 'js-active' of the
     // previous transaction
-    clearPreviousSelection(transaction);
 
     transaction.classList.toggle('js-active');
 
@@ -31,16 +30,5 @@ document.addEventListener('click', function toggleDeleteButton(e) {
     console.log('toggle ran');
 
 })
-
-function clearPreviousSelection(clickedTransaction) {
-
-    const TRANSACTIONS = document.querySelectorAll('.transaction');
-
-    TRANSACTIONS.forEach(function removeActiveStatus(transaction) {
-        if (clickedTransaction.dataset.transactionId === transaction.dataset.transactionId) return;
-        if (transaction.classList.contains('.js-active')) transaction.classList.toggle('.js-active');
-        console.log(transaction.dataset.transactionId);
-    })
-
 
 }

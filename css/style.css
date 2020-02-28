@@ -291,7 +291,7 @@ body {
   transition: color 0.3s;
 }
 
-/* Default button -- be used as a block */
+/* Default button -- can be used as a block */
 
 .btn {
   /* clear default styles first */

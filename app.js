@@ -1,3 +1,7 @@
+/*****************************************************************************/
+/**********************   FUNCTIONALITY AND STUFF   **************************/
+/*****************************************************************************/
+
 // Toggle .js-active, toggle also if clicking outside of an active transaction
 document.addEventListener('click', function toggleJsActive(e) {
 

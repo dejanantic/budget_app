@@ -61,17 +61,19 @@ form.addEventListener('submit', function addNewTransaction(e) {
 
 
 // Close the popup with the escape key
-form.addEventListener('keydown', function closePopup(e) {
+document.addEventListener('keydown', function closePopup(e) {
 
     var currentHref = window.location.href;
     var discardBtn = document.querySelector('.btn-discard');
 
-    if (currentHref.endsWith('#new-transaction')) {
+    if (e.keyCode === 27 && currentHref.endsWith('#new-transaction')) console.log('transaction discarded');
 
-        if (e.keyCode === 27) discardBtn.click();
-        console.log('transaction discarded');
+    // if (currentHref.endsWith('#new-transaction')) {
 
-    };
+    //     if (e.keyCode === 27) discardBtn.click();
+    //     console.log('transaction discarded');
+
+    // };
 
 
     // The form's discard button sets the href to "#", which removes the popup
@@ -100,6 +102,14 @@ var transactions = [];
 var idCounter = 0;
 function createTransactionId() {
     return ++idCounter;
+}
+
+
+
+
+// Reset inputs on new transaction discard
+function resetInputs() {
+    var inputs = document.querySelectorAll('')
 }
 
 

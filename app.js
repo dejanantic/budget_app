@@ -134,10 +134,15 @@ function buildTransactionHTML(transaction) {
     var transactionsList = document.querySelector('.js-transactions-list');
     var li = document.createElement('li');
 
+    // Create p.transaction__description to insert transaction.desc as 
+    // var p = document.createElement('p');
+    // p.className = 'transaction__description';
+    // p.textContent = transaction.desc;
+
     li.className = 'transaction js-transaction ' + (transaction.amount >= 0 ? 'transaction--income' : 'transaction--expense');
 
     // Build the inner HTML for the li.transaction
-    var InnerLiHTML;
+    var innerLiHTML;
     innerLiHTML = '<div class="transaction__group">';
     innerLiHTML += '<p class="transaction__description">' + transaction.desc + '</p>';
     innerLiHTML += '<p class="transaction__date">' + transaction.date + '</p>';
@@ -149,6 +154,8 @@ function buildTransactionHTML(transaction) {
 
     li.insertAdjacentHTML('afterbegin', innerLiHTML);
     transactionsList.prepend(li);
+
+
 
 }
 

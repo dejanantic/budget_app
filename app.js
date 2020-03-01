@@ -28,11 +28,12 @@ document.addEventListener('click', function toggleJsActive(e) {
 
 
 
+
 // Create and add new transaction
 var form = document.querySelector('.js-form');
 
 form.addEventListener('submit', function addNewTransaction(e) {
-    e.preventDefault();
+    // e.preventDefault(); /* Ask Milos whether it's a good idea to keep this */
 
 
     var inputDescription = document.querySelector('#description').value,
@@ -54,6 +55,30 @@ form.addEventListener('submit', function addNewTransaction(e) {
 
     // Build the HTML of new transaction
     buildTransactionHTML(transaction);
+})
+
+
+
+
+// Close the popup with the escape key
+form.addEventListener('keydown', function closePopup(e) {
+
+    var currentHref = window.location.href;
+    var discardBtn = document.querySelector('.btn-discard');
+
+    if (currentHref.endsWith('#new-transaction')) {
+
+        if (e.keyCode === 27) discardBtn.click();
+        console.log('transaction discarded');
+
+    };
+
+
+    // The form's discard button sets the href to "#", which removes the popup
+    // TD: when discarding the transaction, clear the input value if entered
+    // with a method on the discardBtn object
+
+
 })
 
 
@@ -81,6 +106,18 @@ function createTransactionId() {
 
 
 
+// Transaction constructor
+function Transaction(description, amount, date) {
+    this.id = createTransactionId();
+    this.desc = description;
+    this.amount = amount;
+    this.date = date;
+}
+
+
+
+
+
 // Build HTML for new transaction 
 function buildTransactionHTML(transaction) {
 
@@ -98,7 +135,7 @@ function buildTransactionHTML(transaction) {
     innerLiHTML += '<p class="transaction__amount">' + transaction.amount;
     innerLiHTML += '<span class="transaction__currency">&euro;</span>';
     innerLiHTML += '</p>'; // closing tag .transaction__amount
-    innerLiHTML += '<a href="#" class="transaction__delete .js-transaction__delete>&times;</a>';
+    innerLiHTML += '<a href="#" class="transaction__delete js-transaction__delete">&times;</a>';
 
     li.insertAdjacentHTML('afterbegin', innerLiHTML);
     transactionsList.prepend(li);
@@ -117,16 +154,4 @@ function resetTransactions() {
     TRANSACTIONS.forEach(function (transaction) {
         transaction.classList.remove('js-active');
     });
-}
-
-
-
-
-
-// New transaction constructor
-function Transaction(description, amount, date) {
-    this.id = createTransactionId();
-    this.desc = description;
-    this.amount = amount;
-    this.date = date;
 }

@@ -8,8 +8,6 @@ var today = new Date().toISOString().slice(0, 10);
 inputDate.value = today;
 
 
-
-
 // Toggle .js-active, toggle also if clicking outside of an active transaction
 document.addEventListener('click', function toggleJsActive(e) {
 
@@ -24,9 +22,6 @@ document.addEventListener('click', function toggleJsActive(e) {
 
     resetTransactions();
 })
-
-
-
 
 
 // Create and add new transaction
@@ -58,8 +53,6 @@ form.addEventListener('submit', function addNewTransaction(e) {
 })
 
 
-
-
 // Close the popup with the escape key
 document.addEventListener('keydown', function closePopup(e) {
 
@@ -84,18 +77,13 @@ document.addEventListener('keydown', function closePopup(e) {
 })
 
 
-
-
-
 /*****************************************************************************/
 /***********************   FUNCTION DECLARATIONS   ***************************/
 /*****************************************************************************/
 
+
 // Array to store the transactions
 var transactions = [];
-
-
-
 
 
 // Create new transaction ID
@@ -105,15 +93,10 @@ function createTransactionId() {
 }
 
 
-
-
 // Reset inputs on new transaction discard
 function resetInputs() {
     var inputs = document.querySelectorAll('')
 }
-
-
-
 
 
 // Transaction constructor
@@ -125,7 +108,13 @@ function Transaction(description, amount, date) {
 }
 
 
-
+// Format input date
+function formatDate(transactionDate) {
+    transactionDate = transactionDate.split('-');
+    transactionDate.reverse();
+    transactionDate = transactionDate.join('/');
+    return transactionDate;
+}
 
 
 // Build HTML for new transaction 
@@ -145,7 +134,7 @@ function buildTransactionHTML(transaction) {
     var innerLiHTML;
     innerLiHTML = '<div class="transaction__group">';
     innerLiHTML += '<p class="transaction__description">' + transaction.desc + '</p>';
-    innerLiHTML += '<p class="transaction__date">' + transaction.date + '</p>';
+    innerLiHTML += '<p class="transaction__date">' + formatDate(transaction.date) + '</p>';
     innerLiHTML += '</div>'; // closing tag .transaction__group
     innerLiHTML += '<p class="transaction__amount">' + transaction.amount;
     innerLiHTML += '<span class="transaction__currency">&euro;</span>';
@@ -154,13 +143,7 @@ function buildTransactionHTML(transaction) {
 
     li.insertAdjacentHTML('afterbegin', innerLiHTML);
     transactionsList.prepend(li);
-
-
-
 }
-
-
-
 
 
 // Remove .js-active from transaction when clicking away

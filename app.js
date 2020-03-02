@@ -122,18 +122,18 @@ function buildTransactionHTML(transaction) {
 
     var transactionsList = document.querySelector('.js-transactions-list');
     var li = document.createElement('li');
-
-    // Create p.transaction__description to insert transaction.desc as 
-    // var p = document.createElement('p');
-    // p.className = 'transaction__description';
-    // p.textContent = transaction.desc;
-
     li.className = 'transaction js-transaction ' + (transaction.amount >= 0 ? 'transaction--income' : 'transaction--expense');
+
+    // Create p element that will store the user's transaction description (to
+    // prevent malicious code injection)
+    var p = document.createElement('p');
+    p.className = 'transaction__description';
+    p.textContent = transaction.desc;
 
     // Build the inner HTML for the li.transaction
     var innerLiHTML;
     innerLiHTML = '<div class="transaction__group">';
-    innerLiHTML += '<p class="transaction__description">' + transaction.desc + '</p>';
+    innerLiHTML += p.outerHTML;
     innerLiHTML += '<p class="transaction__date">' + formatDate(transaction.date) + '</p>';
     innerLiHTML += '</div>'; // closing tag .transaction__group
     innerLiHTML += '<p class="transaction__amount">' + transaction.amount;

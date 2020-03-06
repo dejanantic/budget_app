@@ -8,23 +8,42 @@ var today = new Date().toISOString().slice(0, 10);
 inputDate.value = today;
 
 
-// Toggle .js-active, toggle also if clicking outside of an active transaction
+// Toggle .js-active on transaction click, remove .js-active if click outside
+// transactionsList
 document.addEventListener('click', function toggleJsActive(e) {
 
-    if (e.target.closest('li.js-transaction')) {
+    // If click happens outside the transactions list area, remove
+    // .js-active class on all transactions
+    if (!e.target.closest('.js-transactions-list')) {
 
-        const TRANSACTION = e.target.closest('li');
-
-        TRANSACTION.classList.toggle('js-active');
-
+        // Function to remove .js-active class on all transactions
+        removeJsActiveAll();
         return;
+
+    };
+
+    var transactions = document.querySelectorAll('.js-transaction');
+    var clickedTransaction = e.target.closest('li');
+
+    clickedTransaction.classList.toggle('js-active');
+
+    // Loop through all transactions and remove '.js-active' except the clicked
+    // transaction
+    for (var i = 0; i < transactions.length; i++) {
+
+        var transaction = transactions[i];
+
+        // If transaction === clicked transaction, skip to next iteration
+        if (transaction.dataset.transactionId === clickedTransaction.dataset.transactionId) continue;
+
+        transaction.classList.remove('js-active');
     }
 
-    resetTransactions();
 })
 
 
-// Create and add new transaction
+
+// ADD NEW TRANSACTION
 var form = document.querySelector('.js-form');
 
 form.addEventListener('submit', function addNewTransaction(e) {
@@ -123,6 +142,7 @@ function buildTransactionHTML(transaction) {
     var transactionsList = document.querySelector('.js-transactions-list');
     var li = document.createElement('li');
     li.className = 'transaction js-transaction ' + (transaction.amount >= 0 ? 'transaction--income' : 'transaction--expense');
+    li.dataset.transactionId = transaction.id;
 
     // Create p element that will store the user's transaction description (to
     // prevent malicious code injection)
@@ -147,11 +167,12 @@ function buildTransactionHTML(transaction) {
 
 
 // Remove .js-active from transaction when clicking away
-function resetTransactions() {
+function removeJsActiveAll() {
 
     const TRANSACTIONS = document.querySelectorAll('.js-transaction');
 
     TRANSACTIONS.forEach(function (transaction) {
         transaction.classList.remove('js-active');
     });
+
 }

@@ -42,12 +42,58 @@ document.addEventListener('click', function toggleJsActive(e) {
 })
 
 
+// Show new transaction section when clicking on the 'new transaction button'
+var newTransactionButton = document.querySelector('.js-new-transaction__btn');
+
+newTransactionButton.addEventListener('click', function makeNewTransactionSectionVisible(e) {
+
+    toggleNewTransactionSection();
+
+    // Set the input's value to today if empty
+    if (!inputDate.value) inputDate.value = today;
+
+})
+
+// Hide 'new transaction section' when pressing escape button
+var newTransactionSection = document.getElementById('new-transaction');
+
+document.addEventListener('keydown', function hideNewTransactionSection(e) {
+
+    if (e.keyCode === 27) {
+
+        // Select 'new transaction' section
+        var newTransactionSection = document.getElementById('new-transaction');
+
+        // Only toggle '.js-shown' if the section is shown
+        if (newTransactionSection.classList.contains('js-shown')) toggleNewTransactionSection();
+        console.log('here not running');
+    }
+
+})
+
+// Hide 'new transaction section' when clicking on black background
+
+newTransactionSection.addEventListener('click', function hideNewTransactionSection(e) {
+
+    if (!e.target.matches('#new-transaction')) return;
+
+    // Select 'new transaction' section
+    var newTransactionSection = document.getElementById('new-transaction');
+
+    // Only toggle '.js-shown' if the section is shown
+    if (newTransactionSection.classList.contains('js-shown')) toggleNewTransactionSection();
+
+})
+
 
 // Add new transaction
 var form = document.querySelector('.js-form');
 
 form.addEventListener('submit', function addNewTransaction(e) {
-    // e.preventDefault(); /* Ask Milos whether it's a good idea to keep this */
+
+    // By preventing the default action, we have to reset the form if we want
+    // to clear the previous user input TK
+    e.preventDefault();
 
 
     var inputDescription = document.querySelector('#description').value,
@@ -69,6 +115,17 @@ form.addEventListener('submit', function addNewTransaction(e) {
 
     // Build the HTML of new transaction
     buildTransactionHTML(transaction);
+
+    // Remove the popup after the new transaction is added
+    toggleNewTransactionSection();
+})
+
+
+// Reset the form and toggle .js-shown from the new transaction section
+form.addEventListener('reset', function discardForm(e) {
+
+    toggleNewTransactionSection();
+
 })
 
 
@@ -83,30 +140,8 @@ document.addEventListener('click', function deleteTransaction(e) {
     // Select parent Li and delete it
     var parentLi = deleteBtn.closest('li');
     parentLi.remove();
-})
 
-
-// Close the popup with the escape key
-document.addEventListener('keydown', function closePopup(e) {
-
-    var currentHref = window.location.href;
-    var discardBtn = document.querySelector('.btn-discard');
-
-    if (e.keyCode === 27 && currentHref.endsWith('#new-transaction')) console.log('transaction discarded');
-
-    // if (currentHref.endsWith('#new-transaction')) {
-
-    //     if (e.keyCode === 27) discardBtn.click();
-    //     console.log('transaction discarded');
-
-    // };
-
-
-    // The form's discard button sets the href to "#", which removes the popup
-    // TD: when discarding the transaction, clear the input value if entered
-    // with a method on the discardBtn object
-
-
+    // TK remove removed transaction from the transactions array
 })
 
 
@@ -189,4 +224,11 @@ function removeJsActiveAll() {
         transaction.classList.remove('js-active');
     });
 
+}
+
+function toggleNewTransactionSection() {
+
+    var newTransactionSection = document.getElementById('new-transaction');
+
+    newTransactionSection.classList.toggle('js-shown');
 }

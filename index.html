@@ -18,7 +18,7 @@
 
         </nav>
 
-        <main>
+        <main class="main">
 
             <!-- Monthly overview -->
             <section class="overview">
@@ -65,7 +65,7 @@
 
                     </li>
 
-                    <li class="transaction transaction--expense js-transaction js-active" data-transaction-id="100">
+                    <li class="transaction transaction--expense js-transaction" data-transaction-id="100">
 
                         <div class="transaction__group">
                             <p class="transaction__description">iPhone</p>
@@ -79,7 +79,7 @@
 
             </section>
 
-            <div class="new-transaction" id="new-transaction">
+            <div class="new-transaction js-new-transaction" id="new-transaction">
 
                 <div class="new-transaction__content">
 
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="form__group form__buttons">
-                            <a href="#" class="btn-discard">Discard</a>
+                            <button type="reset" href="#" class="btn btn--discard">Discard</button>
                             <button href="#" type="submit" class="btn">Add transaction</button>
                         </div>
 
@@ -113,7 +113,7 @@
 
             </div>
 
-            <a href="#new-transaction" class="new-transaction__btn"><span>&plus;</span></a>
+            <a class="new-transaction__btn js-new-transaction__btn"><span>&plus;</span></a>
 
         </main>
 

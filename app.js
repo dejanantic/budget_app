@@ -43,7 +43,7 @@ document.addEventListener('click', function toggleJsActive(e) {
 
 
 
-// ADD NEW TRANSACTION
+// Add new transaction
 var form = document.querySelector('.js-form');
 
 form.addEventListener('submit', function addNewTransaction(e) {
@@ -69,6 +69,20 @@ form.addEventListener('submit', function addNewTransaction(e) {
 
     // Build the HTML of new transaction
     buildTransactionHTML(transaction);
+})
+
+
+// Delete transaction
+document.addEventListener('click', function deleteTransaction(e) {
+
+    // If clicked element !== transaction delete button, return
+    if (!e.target.classList.contains('js-transaction__delete')) return;
+
+    var deleteBtn = e.target;
+
+    // Select parent Li and delete it
+    var parentLi = deleteBtn.closest('li');
+    parentLi.remove();
 })
 
 

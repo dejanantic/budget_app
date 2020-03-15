@@ -10,6 +10,7 @@
   --color-background: #f7f7f7;
   --color-white: #fff;
   --color-black: #000;
+  --color-grey: #999;
   --color-button-purple: #6647ff;
 
   --font-primary: "Roboto", "sans-serif";
@@ -189,33 +190,50 @@ body {
 
 .transaction__amount {
   position: relative;
-  right: -4.7rem;
+  right: -10.34rem;
   transition: right 0.2s ease-in-out;
 }
 
-.transaction__delete {
+.transaction__buttons {
+  display: flex;
+  clip-path: inset(0% 0% 0% 100%);
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.transaction__delete,
+.transaction__edit {
   text-decoration: none;
-  background: var(--color-red);
-  color: var(--color-white);
   display: inline-block;
   padding: 0 1rem;
-  font-size: 3rem;
   margin-left: 1rem;
-  transition: all 0.2s ease-in-out;
   cursor: pointer;
-  clip-path: inset(0% 0% 0% 100%);
-  visibility: collapse;
+  /* clip-path: inset(0% 0% 0% 100%); */
+}
+
+.transaction__delete {
+  background: var(--color-red);
+  color: var(--color-white);
+  font-size: 3rem;
+}
+
+.transaction__edit {
+  background: var(--color-grey);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  text-align: center;
 }
 
 /* Show remove transaction button when transaction is active */
-.transaction.js-active > .transaction__delete {
+.transaction.js-active .transaction__buttons {
   clip-path: inset(0% 0% 0% 0%);
   visibility: visible;
 }
 
 /* Move transaction__amount back to original position when transaction is */
 /* active */
-.transaction.js-active > .transaction__amount {
+.transaction.js-active .transaction__amount {
   right: 0;
 }
 

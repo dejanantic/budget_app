@@ -142,6 +142,7 @@ document.addEventListener('click', function deleteTransaction(e) {
     parentLi.remove();
 
     // TK remove removed transaction from the transactions array
+    // TK remove event listener
 })
 
 
@@ -208,9 +209,20 @@ function buildTransactionHTML(transaction) {
     innerLiHTML += '<p class="transaction__amount">' + transaction.amount;
     innerLiHTML += '<span class="transaction__currency">&euro;</span>';
     innerLiHTML += '</p>'; // closing tag .transaction__amount
+    innerLiHTML += '<div class="transaction__buttons">';
+    innerLiHTML += '<a href="#" class="transaction__edit js-transaction__edit">Edit</a>';
     innerLiHTML += '<a href="#" class="transaction__delete js-transaction__delete">&times;</a>';
+    innerLiHTML += '</div>'; // closing tag .transaction__buttons
 
     li.insertAdjacentHTML('afterbegin', innerLiHTML);
+
+    // Add event listener to edit button
+    var editButton = li.querySelector('.js-transaction__edit');
+    editButton.addEventListener('click', function openEditModal() {
+        console.log('open edit window');
+    })
+
+
     transactionsList.prepend(li);
 }
 

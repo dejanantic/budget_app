@@ -8,6 +8,33 @@ var today = new Date().toISOString().slice(0, 10);
 inputDate.value = today;
 
 
+// Array to store the transactions
+var transactions = [
+    {
+        id: 100,
+        desc: 'iPhone',
+        amount: -650,
+        date: '2020-02-15'
+    },
+    {
+        id: 99,
+        desc: 'Salary',
+        amount: 2500,
+        date: '2020-02-24'
+    }
+];
+
+
+// On DOMContentLoad populate the transaction-list with array items
+document.addEventListener('DOMContentLoaded', function buildTransactions() {
+
+    for (var i = 0; i < transactions.length; i++) {
+        buildTransactionHTML(transactions[i]);
+    }
+
+})
+
+
 // Toggle .js-active on transaction click, remove .js-active if click outside
 // transactionsList
 document.addEventListener('click', function toggleJsActive(e) {
@@ -105,7 +132,7 @@ form.addEventListener('submit', function addNewTransaction(e) {
 
 
     // Push new transaction in transactions array
-    transactions.push(transaction);
+    transactions.unshift(transaction);
     console.log(transactions);
 
 
@@ -151,10 +178,6 @@ document.addEventListener('click', function deleteTransaction(e) {
 /*****************************************************************************/
 
 
-// Array to store the transactions
-var transactions = [];
-
-
 // Create new transaction ID
 var idCounter = 0;
 function createTransactionId() {
@@ -163,9 +186,9 @@ function createTransactionId() {
 
 
 // Reset inputs on new transaction discard
-function resetInputs() {
-    var inputs = document.querySelectorAll('')
-}
+// function resetInputs() {
+//     var inputs = document.querySelectorAll('')
+// }
 
 
 // Transaction constructor

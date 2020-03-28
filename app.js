@@ -156,21 +156,21 @@ form.addEventListener('reset', function discardForm(e) {
 })
 
 
-// Delete transaction
-document.addEventListener('click', function deleteTransaction(e) {
+// // Delete transaction
+// document.addEventListener('click', function deleteTransaction(e) {
 
-    // If clicked element !== transaction delete button, return
-    if (!e.target.classList.contains('js-transaction__delete')) return;
+//     // If clicked element !== transaction delete button, return
+//     if (!e.target.classList.contains('js-transaction__delete')) return;
 
-    var deleteBtn = e.target;
+//     var deleteBtn = e.target;
 
-    // Select parent Li and delete it
-    var parentLi = deleteBtn.closest('li');
-    parentLi.remove();
+//     // Select parent Li and delete it
+//     var parentLi = deleteBtn.closest('li');
+//     parentLi.remove();
 
-    // TK remove removed transaction from the transactions array
-    // TK remove event listener
-})
+//     // TK remove removed transaction from the transactions array
+//     // TK remove event listener
+// })
 
 
 /*****************************************************************************/
@@ -245,8 +245,55 @@ function buildTransactionHTML(transaction) {
         console.log('open edit window');
     })
 
+    // Add event listener to delete button
+    var deleteButton = li.querySelector('.js-transaction__delete');
+    deleteButton.addEventListener('click', deleteTransaction)
+
 
     transactionsList.prepend(li);
+}
+
+// Delete transaction functionality
+function deleteTransaction() {
+
+
+    // Delete button
+    var deleteButton = this;
+
+
+    // Remove the event listener from delete button
+    deleteButton.removeEventListener('click', deleteTransaction);
+
+
+    //Select the transaction (li)
+    var transaction = this.closest('li');
+
+
+    // NOTICE: attributes can only store a string value (transactionId is
+    // a string, not a number)
+    // For comparisons, either convert it to a number or use the loose equality
+    // operator to coerce the value to a number
+    var transactionId = transaction.dataset.transactionId;
+
+
+    // Remove transaction from the DOM
+    transaction.remove();
+
+
+    for (var tr of transactions) {
+
+        // Use loose equality operator to allow for coercion
+        if (tr.id == transactionId) {
+
+            var transactionIndex = transactions.indexOf(tr);
+
+            // I am mutating an array here ... don't know if that's ok
+            transactions.splice(transactionIndex, 1);
+
+        }
+
+    }
+
 }
 
 

@@ -52,6 +52,15 @@ document.addEventListener('click', function toggleJsActive(e) {
     var transactions = document.querySelectorAll('.js-transaction');
     var clickedTransaction = e.target.closest('li');
 
+    // If we clicked on empty space between transactions, remove the .js-active
+    // and return
+    if (clickedTransaction === null) {
+
+        removeJsActiveAll();
+        return;
+
+    }
+
     clickedTransaction.classList.toggle('js-active');
 
     // Loop through all transactions and remove '.js-active' except the clicked
@@ -154,23 +163,6 @@ form.addEventListener('reset', function discardForm(e) {
     toggleNewTransactionSection();
 
 })
-
-
-// // Delete transaction
-// document.addEventListener('click', function deleteTransaction(e) {
-
-//     // If clicked element !== transaction delete button, return
-//     if (!e.target.classList.contains('js-transaction__delete')) return;
-
-//     var deleteBtn = e.target;
-
-//     // Select parent Li and delete it
-//     var parentLi = deleteBtn.closest('li');
-//     parentLi.remove();
-
-//     // TK remove removed transaction from the transactions array
-//     // TK remove event listener
-// })
 
 
 /*****************************************************************************/

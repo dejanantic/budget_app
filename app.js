@@ -2,6 +2,7 @@
 /**********************   FUNCTIONALITY AND STUFF   **************************/
 /*****************************************************************************/
 
+// This can be a function since I use it all the time
 // Set the value of the date input to today's date
 var inputDate = document.querySelector('#date');
 var today = new Date().toISOString().slice(0, 10);
@@ -125,7 +126,7 @@ newTransactionSection.addEventListener('click', function hideNewTransactionSecti
 // Add new transaction
 var form = document.querySelector('.js-form');
 
-form.addEventListener('submit', function addNewTransaction(e) {
+form.addEventListener('submit', function addEditNewTransaction(e) {
 
     // By preventing the default action, we have to reset the form if we want
     // to clear the previous user input TK
@@ -136,24 +137,96 @@ form.addEventListener('submit', function addNewTransaction(e) {
         inputAmount = parseInt(document.querySelector('#amount').value),
         inputDate = document.querySelector('#date').value;
 
+    if (form.dataset.mode === 'edit-transaction') {
 
-    var transaction = new Transaction(inputDescription, inputAmount, inputDate);
+        var activeTransactionId = form.dataset.activeTransactionId;
+
+        // Update transaction object in transactions array
+        for (var transaction of transactions) {
+
+            if (transaction.id == form.dataset.activeTransactionId) {
+
+                transaction.amount = inputAmount;
+                transaction.date = inputDate;
+                transaction.desc = inputDescription;
+
+            }
+        }
+
+        // Update transaction's data in the DOM
+        var DOMTransactions = document.querySelectorAll('.js-transaction');
+
+        for (var DOMTransaction of DOMTransactions) {
+
+            // We are looking for the active transaction with the active ID
+            if (DOMTransaction.dataset.transactionId == activeTransactionId) {
+
+                // Getting all the transaction's data 
+                var DOMTransactionData = DOMTransaction.getElementsByTagName('p');
+
+                for (var data of DOMTransactionData) {
+
+                    switch (data.className) {
+                        case 'transaction__description':
+                            data.textContent = inputDescription;
+                            break;
+
+                        case 'transaction__date':
+                            data.textContent = formatDate(inputDate);
+                            break;
+
+                        case 'transaction__amount':
+                            // The transaction's class has to update, depending on the updated amount (income
+                            // if positive, expense if negative)
+                            if (inputAmount >= 0) {
+
+                                DOMTransaction.className = 'transaction js-transaction transaction--income';
+
+                            } else {
+
+                                DOMTransaction.className = 'transaction js-transaction transaction--expense';
+
+                            }
+
+                            // We must use the .innerHTML since we have to add the currency symbol to the amount
+                            data.innerHTML = `${inputAmount}<span class="transaction__currency">&euro;</span>`;
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        // Reset the form's dataset to default
+        resetFormDataset();
+
+    } else {    // If we are not editing an existing transaction, we are making
+        // a new one
+
+        var transaction = new Transaction(inputDescription, inputAmount, inputDate);
 
 
-    // Push new transaction in transactions array
-    transactions.unshift(transaction);
-    console.log(transactions);
+        // Push new transaction in transactions array
+        transactions.unshift(transaction);
+        console.log(transactions);
 
 
-    // Push transaction into local storage
-    // TK
+        // Push transaction into local storage
+        // TK
 
 
-    // Build the HTML of new transaction
-    buildTransactionHTML(transaction);
+        // Build the HTML of new transaction
+        buildTransactionHTML(transaction);
+
+    }
+
 
     // Remove the popup after the new transaction is added
     toggleNewTransactionSection();
+
+    // Reset the inputs so we don't see the previous input values
+    resetInputs();
 })
 
 
@@ -177,12 +250,6 @@ function createTransactionId() {
 }
 
 
-// Reset inputs on new transaction discard
-// function resetInputs() {
-//     var inputs = document.querySelectorAll('')
-// }
-
-
 // Transaction constructor
 function Transaction(description, amount, date) {
     this.id = createTransactionId();
@@ -198,6 +265,15 @@ function formatDate(transactionDate) {
     transactionDate.reverse();
     transactionDate = transactionDate.join('/');
     return transactionDate;
+}
+
+// Reverse format date (when we edit the transaction)
+function reverseFormatDate(date) {
+    date = date.split('/');
+    date.reverse();
+    date = date.join('-');
+
+    return date;
 }
 
 
@@ -233,9 +309,7 @@ function buildTransactionHTML(transaction) {
 
     // Add event listener to edit button
     var editButton = li.querySelector('.js-transaction__edit');
-    editButton.addEventListener('click', function openEditModal() {
-        console.log('open edit window');
-    })
+    editButton.addEventListener('click', openEditModal)
 
     // Add event listener to delete button
     var deleteButton = li.querySelector('.js-transaction__delete');
@@ -288,6 +362,69 @@ function deleteTransaction() {
 
 }
 
+// Edit transaction functionality
+function openEditModal() {
+
+    // open the new transaction window
+    toggleNewTransactionSection(); // Maybe add a flag to change the title of the section
+
+    // Get transaction data (id, desc, amount and date)
+    var activeTransaction = this.closest('li');
+    var id, desc, amount, date;
+
+    id = activeTransaction.dataset.transactionId;
+
+
+    var transactionData = activeTransaction.getElementsByTagName('p');
+
+    for (var item of transactionData) {
+        switch (item.className) {
+            case 'transaction__amount':
+                amount = item.textContent;
+                // Remove currency symbol from the end
+                amount = amount.slice(0, -1);
+                // Convert to integer
+                amount = parseInt(amount);
+                break;
+
+            case 'transaction__date':
+                date = item.textContent;
+                // Format the date so we can use it in date input
+                date = reverseFormatDate(date);
+                break;
+
+            case 'transaction__description':
+                desc = item.textContent;
+                break;
+        }
+    }
+
+    // Populate form inputs with transaction data
+    var form = document.querySelector('form');
+    form.dataset.mode = 'edit-transaction';
+    form.dataset.activeTransactionId = id;
+
+    var inputs = form.querySelectorAll('input');
+
+    for (var input of inputs) {
+        switch (input.id) {
+            case 'amount':
+                input.value = amount;
+                break;
+
+            case 'date':
+                input.value = date;
+                break;
+
+            case 'description':
+                input.value = desc;
+                break;
+        }
+    }
+
+    console.log(date, desc, amount);
+
+}
 
 // Remove .js-active from transaction when clicking away
 function removeJsActiveAll() {
@@ -305,4 +442,25 @@ function toggleNewTransactionSection() {
     var newTransactionSection = document.getElementById('new-transaction');
 
     newTransactionSection.classList.toggle('js-shown');
+}
+
+function resetFormDataset() {
+
+    var form = document.querySelector('.js-form');
+
+    form.dataset.mode = 'new-transaction';
+    form.dataset.activeTransactionId = '';
+
+}
+
+function resetInputs() {
+
+    var inputDescription = document.querySelector('#description'),
+        inputAmount = document.querySelector('#amount'),
+        inputDate = document.querySelector('#date');
+
+    inputDescription.value = '';
+    inputAmount.value = '';
+    inputDate.value = today;
+
 }

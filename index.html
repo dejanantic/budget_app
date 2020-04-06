@@ -61,23 +61,30 @@
 
                 <div class="new-transaction__content">
 
-                    <form action="#" class="form js-form">
+                    <form action="#" class="form js-form" data-edit-mode="false" data-active-transaction-id="null">
 
                         <h3 class="heading-secondary">Add new transaction</h3>
 
                         <div class="form__group">
                             <label for="description" class="form__label">Description</label>
-                            <input type="text" class="form__input" id="description" placeholder="e.g. Groceries" required>
+                            <input type="text" class="form__input" id="description" name="description" placeholder="e.g. Groceries" required>
+                        </div>
+
+                        <div class="form__group">
+                            <input type="radio" class="form__input-radio" name="transactionCategory" id="expense" value="expense" checked>
+                            <label for="expense" class="form__label-radio">Expense</label>
+                            <input type="radio" class="form__input-radio" name="transactionCategory" id="income" value="income">
+                            <label for="income" class="form__label-radio">Income</label>
                         </div>
 
                         <div class="form__group">
                             <label for="amount" class="form__label">Amount</label>
-                            <input type="number" class="form__input" id="amount" placeholder="- expense, + income" required>
+                            <input type="number" class="form__input" id="amount" name="amount" placeholder="e.g. 500" min="0" required>
                         </div>
 
                         <div class="form__group">
                             <label for="date" class="form__label">Date</label>
-                            <input type="date" id="date" class="form__input" required>
+                            <input type="date" id="date" name="date" class="form__input" required>
                         </div>
 
                         <div class="form__group form__buttons">

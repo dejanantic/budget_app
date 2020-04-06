@@ -300,6 +300,10 @@ body {
   margin-top: 0.3rem;
 }
 
+.form__input-radio:last-of-type {
+  margin-left: 1.5rem;
+}
+
 .form__buttons {
   display: flex;
   justify-content: flex-end;

@@ -2,6 +2,14 @@
 /**********************   FUNCTIONALITY AND STUFF   **************************/
 /*****************************************************************************/
 
+// CURRENT FOCUS: Update the buildNewTransactionHTML to be able to pass an id
+// argument in case we are editing a transaction, but set it to default that
+// it generates a new ID with that function
+// Also, refactor the generateNewID so that the counter variable is protected in the closure
+// After these changes, complete the edit part of the 'submit' event listener
+// Use Array.find() helper method to edit the transaction
+
+
 // This can be a function since I use it all the time
 // Set the value of the date input to today's date
 var inputDate = document.querySelector('#date');
@@ -14,12 +22,14 @@ var transactions = [
     {
         id: 100,
         desc: 'iPhone',
-        amount: -650,
+        category: 'expense',
+        amount: 650,
         date: '2020-02-15'
     },
     {
         id: 99,
         desc: 'Salary',
+        category: 'income',
         amount: 2500,
         date: '2020-02-24'
     }
@@ -29,8 +39,12 @@ var transactions = [
 // On DOMContentLoad populate the transaction-list with array items
 document.addEventListener('DOMContentLoaded', function buildTransactions() {
 
+    var transactionsList = document.querySelector('.js-transactions-list');
+
     for (var i = 0; i < transactions.length; i++) {
-        buildTransactionHTML(transactions[i]);
+        var transaction = transactions[i];
+        var transactionHTML = buildTransactionHTML(transaction);
+        transactionsList.prepend(transactionHTML);
     }
 
 })
@@ -91,25 +105,9 @@ newTransactionButton.addEventListener('click', function makeNewTransactionSectio
 
 })
 
-// Hide 'new transaction section' when pressing escape button
-var newTransactionSection = document.getElementById('new-transaction');
-
-document.addEventListener('keydown', function hideNewTransactionSection(e) {
-
-    if (e.keyCode === 27) {
-
-        // Select 'new transaction' section
-        var newTransactionSection = document.getElementById('new-transaction');
-
-        // Only toggle '.js-shown' if the section is shown
-        if (newTransactionSection.classList.contains('js-shown')) toggleNewTransactionSection();
-        console.log('here not running');
-    }
-
-})
 
 // Hide 'new transaction section' when clicking on black background
-
+var newTransactionSection = document.getElementById('new-transaction');
 newTransactionSection.addEventListener('click', function hideNewTransactionSection(e) {
 
     if (!e.target.matches('#new-transaction')) return;
@@ -123,110 +121,87 @@ newTransactionSection.addEventListener('click', function hideNewTransactionSecti
 })
 
 
-// Add new transaction
-var form = document.querySelector('.js-form');
+// Hide 'new transaction section' when pressing escape button
+document.addEventListener('keydown', function hideNewTransactionSection(e) {
 
-form.addEventListener('submit', function addEditNewTransaction(e) {
+    if (e.keyCode === 27) {
 
-    // By preventing the default action, we have to reset the form if we want
-    // to clear the previous user input TK
-    e.preventDefault();
+        // Select 'new transaction' section
+        var newTransactionSection = document.getElementById('new-transaction');
 
-
-    var inputDescription = document.querySelector('#description').value,
-        inputAmount = parseInt(document.querySelector('#amount').value),
-        inputDate = document.querySelector('#date').value;
-
-    if (form.dataset.mode === 'edit-transaction') {
-
-        var activeTransactionId = form.dataset.activeTransactionId;
-
-        // Update transaction object in transactions array
-        for (var transaction of transactions) {
-
-            if (transaction.id == form.dataset.activeTransactionId) {
-
-                transaction.amount = inputAmount;
-                transaction.date = inputDate;
-                transaction.desc = inputDescription;
-
-            }
-        }
-
-        // Update transaction's data in the DOM
-        var DOMTransactions = document.querySelectorAll('.js-transaction');
-
-        for (var DOMTransaction of DOMTransactions) {
-
-            // We are looking for the active transaction with the active ID
-            if (DOMTransaction.dataset.transactionId == activeTransactionId) {
-
-                // Getting all the transaction's data 
-                var DOMTransactionData = DOMTransaction.getElementsByTagName('p');
-
-                for (var data of DOMTransactionData) {
-
-                    switch (data.className) {
-                        case 'transaction__description':
-                            data.textContent = inputDescription;
-                            break;
-
-                        case 'transaction__date':
-                            data.textContent = formatDate(inputDate);
-                            break;
-
-                        case 'transaction__amount':
-                            // The transaction's class has to update, depending on the updated amount (income
-                            // if positive, expense if negative)
-                            if (inputAmount >= 0) {
-
-                                DOMTransaction.className = 'transaction js-transaction transaction--income';
-
-                            } else {
-
-                                DOMTransaction.className = 'transaction js-transaction transaction--expense';
-
-                            }
-
-                            // We must use the .innerHTML since we have to add the currency symbol to the amount
-                            data.innerHTML = `${inputAmount}<span class="transaction__currency">&euro;</span>`;
-                            break;
-                    }
-
-                }
-
-            }
-        }
-
-        // Reset the form's dataset to default
-        resetFormDataset();
-
-    } else {    // If we are not editing an existing transaction, we are making
-        // a new one
-
-        var transaction = new Transaction(inputDescription, inputAmount, inputDate);
-
-
-        // Push new transaction in transactions array
-        transactions.unshift(transaction);
-        console.log(transactions);
-
-
-        // Push transaction into local storage
-        // TK
-
-
-        // Build the HTML of new transaction
-        buildTransactionHTML(transaction);
+        // Only toggle '.js-shown' if the section is shown
+        if (newTransactionSection.classList.contains('js-shown')) toggleNewTransactionSection();
 
     }
 
+})
+
+// Add/edit new transaction
+var form = document.querySelector('.js-form');
+
+form.addEventListener('submit', function addEditNewTransaction(e) {
+    e.preventDefault();
+
+    // fire the 'formdata' event
+    new FormData(form);
+
+})
+
+form.addEventListener('formdata', function manipulateData(e) {
+
+    var data = e.formData;
+    var transactionsList = document.querySelector('.js-transactions-list');
+    var transactionData = [];
+    for (var item of data.values()) transactionData.push(item);
+
+    if (form.dataset.editMode === 'true') {
+
+        // Get active transaction id
+        var activeId = form.dataset.activeTransactionId;
+
+        // Set the id as the first item of the transactionData
+        // array. We need to do this since the id must be first the
+        // arguments array of the new transaction constructor
+        transactionData.push(activeId);
+
+        // Save the active transaction reference value in activeTransaction,
+        // wo that we can update it in the next step
+        var activeTransaction = transactions.find(function (transaction) {
+            return transaction.id == activeId;
+        });
+
+        // Update transaction in the transactions array
+        updateTransactionObject.call(activeTransaction, transactionData);
+
+        // Get the active transaction from the DOM
+        var activeDomTransaction = document.querySelector(`[data-transaction-id="${activeId}"]`)
+
+        // Rebuild the HTML with buildTransactionHTML from the updated
+        // transaction object
+        var updatedHTML = buildTransactionHTML(activeTransaction);
+
+        activeDomTransaction.replaceWith(updatedHTML);
+
+    } else {
+
+        // We are adding a new transaction, add the code below
+        var newTransaction = new Transaction(...transactionData);
+
+        // Put the new transaction at the beginning of the transactions array
+        transactions.unshift(newTransaction);
+        console.log(transactions);
+
+        // Get the new transaction's HTML
+        var newTransactionHTML = buildTransactionHTML(newTransaction);
+
+        // Put the new transaction at the top of the Activity List
+        transactionsList.prepend(newTransactionHTML);
+
+    }
 
     // Remove the popup after the new transaction is added
     toggleNewTransactionSection();
 
-    // Reset the inputs so we don't see the previous input values
-    resetInputs();
 })
 
 
@@ -241,23 +216,6 @@ form.addEventListener('reset', function discardForm(e) {
 /*****************************************************************************/
 /***********************   FUNCTION DECLARATIONS   ***************************/
 /*****************************************************************************/
-
-
-// Create new transaction ID
-var idCounter = 0;
-function createTransactionId() {
-    return ++idCounter;
-}
-
-
-// Transaction constructor
-function Transaction(description, amount, date) {
-    this.id = createTransactionId();
-    this.desc = description;
-    this.amount = amount;
-    this.date = date;
-}
-
 
 // Format input date
 function formatDate(transactionDate) {
@@ -276,13 +234,36 @@ function reverseFormatDate(date) {
     return date;
 }
 
+// Create new transaction ID
+// Milos: mogo bi upotrebit closure da zastitim idCounter
+var idCounter = 0;
+function createTransactionId() {
+    return ++idCounter;
+}
+
+// Transaction constructor
+function Transaction(description, category, amount, date, id = createTransactionId()) {
+    this.id = id;
+    this.desc = description;
+    this.category = category;
+    this.amount = parseInt(amount);
+    this.date = date;
+}
+
+// Update the transaction object in the transactions array
+// Use the .call() method to bind 'this' to the transaction object
+function updateTransactionObject(data) {
+    [this.desc, this.category, this.amount, this.date, this.id] = data;
+    this.id = parseInt(this.id);
+    this.amount = parseInt(this.amount);
+}
 
 // Build HTML for new transaction 
 function buildTransactionHTML(transaction) {
 
     var transactionsList = document.querySelector('.js-transactions-list');
     var li = document.createElement('li');
-    li.className = 'transaction js-transaction ' + (transaction.amount >= 0 ? 'transaction--income' : 'transaction--expense');
+    li.className = 'transaction js-transaction ' + (transaction.category === 'income' ? 'transaction--income' : 'transaction--expense');
     li.dataset.transactionId = transaction.id;
 
     // Create p element that will store the user's transaction description (to
@@ -315,8 +296,11 @@ function buildTransactionHTML(transaction) {
     var deleteButton = li.querySelector('.js-transaction__delete');
     deleteButton.addEventListener('click', deleteTransaction)
 
+    // return the built up li to be used in the transaction adding/editing
+    // process
+    return li;
 
-    transactionsList.prepend(li);
+    // transactionsList.prepend(li);
 }
 
 // Delete transaction functionality
@@ -365,15 +349,13 @@ function deleteTransaction() {
 // Edit transaction functionality
 function openEditModal() {
 
-    // open the new transaction window
-    toggleNewTransactionSection(); // Maybe add a flag to change the title of the section
-
     // Get transaction data (id, desc, amount and date)
     var activeTransaction = this.closest('li');
-    var id, desc, amount, date;
+    var id, desc, category, amount, date;
 
     id = activeTransaction.dataset.transactionId;
 
+    category = activeTransaction.classList.contains('transaction--income') ? 'income' : 'expense';
 
     var transactionData = activeTransaction.getElementsByTagName('p');
 
@@ -401,8 +383,11 @@ function openEditModal() {
 
     // Populate form inputs with transaction data
     var form = document.querySelector('form');
-    form.dataset.mode = 'edit-transaction';
-    form.dataset.activeTransactionId = id;
+
+    // Select expense/income radio input based on transaction category
+    // and check it
+    var radioInput = document.getElementById(category);
+    radioInput.checked = true;
 
     var inputs = form.querySelectorAll('input');
 
@@ -422,7 +407,8 @@ function openEditModal() {
         }
     }
 
-    console.log(date, desc, amount);
+    // open the new transaction window
+    toggleNewTransactionSection(true, id);
 
 }
 
@@ -437,19 +423,42 @@ function removeJsActiveAll() {
 
 }
 
-function toggleNewTransactionSection() {
+// If we are editing a transaction, we should pass two arguments in order to
+// update the form's dataset properties
+// 1) 'true' if we are editing a transaction
+// 2) the id of the transaction we are editing
+// Note: I should probably rename this function TK
+function toggleNewTransactionSection(editMode = false, activeId = null) {
 
     var newTransactionSection = document.getElementById('new-transaction');
+    var form = document.querySelector('.form');
+    var sectionTitle = document.querySelector('.form').firstElementChild;
+    var submitButton = document.querySelector('[type=submit]');
 
+    // If the first input's value has content in it, we are editing
+    // Else (input's value is empty), we are making a new transaction
+    // Therefore, update the sectionTitle and submitButton accordingly
+    if (document.getElementById('description').value) {
+
+        form.dataset.editMode = editMode;
+        form.dataset.activeTransactionId = activeId;
+        sectionTitle.textContent = 'Edit Transaction';
+        submitButton.textContent = 'Edit Transaction';
+
+    } else {
+
+        form.dataset.editMode = editMode;
+        form.dataset.activeTransactionId = activeId;
+        sectionTitle.textContent = 'Add New Transaction';
+        submitButton.textContent = 'Add Transaction';
+
+    }
+
+    // Show/hide New Transaction Section
     newTransactionSection.classList.toggle('js-shown');
-}
 
-function resetFormDataset() {
-
-    var form = document.querySelector('.js-form');
-
-    form.dataset.mode = 'new-transaction';
-    form.dataset.activeTransactionId = '';
+    // Reset input fields when hiding the newTransactionSection
+    if (newTransactionSection.classList.contains('js-shown') === false) resetInputs();
 
 }
 
@@ -457,9 +466,11 @@ function resetInputs() {
 
     var inputDescription = document.querySelector('#description'),
         inputAmount = document.querySelector('#amount'),
-        inputDate = document.querySelector('#date');
+        inputDate = document.querySelector('#date'),
+        inputRadioExpense = document.querySelector('#expense');
 
     inputDescription.value = '';
+    inputRadioExpense.checked = true;
     inputAmount.value = '';
     inputDate.value = today;
 

@@ -135,6 +135,10 @@ body {
   margin: 0.5rem 0;
 }
 
+.overview__number {
+  font-size: inherit;
+}
+
 .overview__income-amount {
   color: var(--color-green);
 }

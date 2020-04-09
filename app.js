@@ -2,14 +2,6 @@
 /**********************   FUNCTIONALITY AND STUFF   **************************/
 /*****************************************************************************/
 
-// CURRENT FOCUS: Update the buildNewTransactionHTML to be able to pass an id
-// argument in case we are editing a transaction, but set it to default that
-// it generates a new ID with that function
-// Also, refactor the generateNewID so that the counter variable is protected in the closure
-// After these changes, complete the edit part of the 'submit' event listener
-// Use Array.find() helper method to edit the transaction
-
-
 // This can be a function since I use it all the time
 // Set the value of the date input to today's date
 var inputDate = document.querySelector('#date');
@@ -46,6 +38,8 @@ document.addEventListener('DOMContentLoaded', function buildTransactions() {
         var transactionHTML = buildTransactionHTML(transaction);
         transactionsList.prepend(transactionHTML);
     }
+
+    updateBalanceView(tallyNumbers);
 
 })
 
@@ -199,6 +193,9 @@ form.addEventListener('formdata', function manipulateData(e) {
 
     }
 
+    // Update balance view
+    updateBalanceView(tallyNumbers);
+
     // Remove the popup after the new transaction is added
     toggleNewTransactionSection();
 
@@ -306,18 +303,16 @@ function buildTransactionHTML(transaction) {
 // Delete transaction functionality
 function deleteTransaction() {
 
-
     // Delete button
     var deleteButton = this;
+    var editButton = this.previousElementSibling;
 
-
-    // Remove the event listener from delete button
+    // Remove the event listener from delete and edit buttons
     deleteButton.removeEventListener('click', deleteTransaction);
-
+    editButton.removeEventListener('click', openEditModal);
 
     //Select the transaction (li)
     var transaction = this.closest('li');
-
 
     // NOTICE: attributes can only store a string value (transactionId is
     // a string, not a number)
@@ -325,11 +320,10 @@ function deleteTransaction() {
     // operator to coerce the value to a number
     var transactionId = transaction.dataset.transactionId;
 
-
     // Remove transaction from the DOM
     transaction.remove();
 
-
+    // Remove transaction object from transactions array
     for (var tr of transactions) {
 
         // Use loose equality operator to allow for coercion
@@ -337,12 +331,15 @@ function deleteTransaction() {
 
             var transactionIndex = transactions.indexOf(tr);
 
-            // I am mutating an array here ... don't know if that's ok
+            // I am mutating an array here -- not sure if that's ok
             transactions.splice(transactionIndex, 1);
 
         }
 
     }
+
+    // Update the balance view
+    updateBalanceView(tallyNumbers);
 
 }
 
@@ -410,6 +407,32 @@ function openEditModal() {
     // open the new transaction window
     toggleNewTransactionSection(true, id);
 
+}
+
+// Tally the numbers and display updated values
+function tallyNumbers() {
+
+    var total = income = expenses = 0;
+    transactions.forEach(function (transaction) {
+
+        if (transaction.category === 'income') {
+            total += transaction.amount;
+            income += transaction.amount;
+        } else {
+            total -= transaction.amount;
+            expenses += transaction.amount;
+        }
+
+    });
+
+    return [total, income, expenses];
+
+}
+
+function updateBalanceView(tallyCallback) {
+    var [balance, income, expenses] = document.querySelectorAll('.js-overview__number');
+
+    [balance.textContent, income.textContent, expenses.textContent] = tallyCallback();
 }
 
 // Remove .js-active from transaction when clicking away

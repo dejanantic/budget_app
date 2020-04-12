@@ -289,12 +289,21 @@ body {
   font-weight: bold;
 }
 
+.form__group {
+  padding-bottom: 2.5rem;
+  position: relative;
+}
+
 .form__group:first-of-type {
   margin-top: 1.5rem;
 }
 
-.form__group:not(:last-child) {
-  margin-bottom: 1.5rem;
+.form__group:last-of-type {
+  padding-bottom: 0;
+}
+
+.form__group.radios {
+  padding: 0.25rem 0 1.5rem;
 }
 
 .form__input {
@@ -313,7 +322,7 @@ body {
   justify-content: flex-end;
   align-items: baseline;
   text-transform: uppercase;
-  margin-top: 3rem;
+  margin-top: 1.5rem;
 }
 
 .btn {
@@ -372,4 +381,26 @@ body {
 
 .new-transaction__btn:hover span {
   transform: rotate(180deg);
+}
+
+/* Input Validation Styling */
+
+.form__error-message {
+  position: absolute;
+  visibility: hidden;
+  color: var(--color-red);
+  bottom: 0;
+  left: 0;
+}
+
+.form__group.error input {
+  border: 2px solid var(--color-red);
+}
+
+.form__group.error .form__error-message {
+  visibility: visible;
+}
+
+.form__group.success input {
+  border: 2px solid var(--color-green);
 }

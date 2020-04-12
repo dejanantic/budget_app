@@ -136,8 +136,20 @@ var form = document.querySelector('.js-form');
 form.addEventListener('submit', function addEditNewTransaction(e) {
     e.preventDefault();
 
-    // fire the 'formdata' event
-    new FormData(form);
+    // checkInputs returns true if inputs pass the validity checks,
+    // otherwise returns false, preventing the transaction from being
+    // added or edited -- if false, shows the user what needs to be
+    // corrected
+    if (checkInputs()) {
+
+        // fire the 'formdata' event
+        new FormData(form);
+
+    } else {
+
+        return;
+
+    }
 
 })
 
@@ -153,13 +165,14 @@ form.addEventListener('formdata', function manipulateData(e) {
         // Get active transaction id
         var activeId = form.dataset.activeTransactionId;
 
-        // Set the id as the first item of the transactionData
-        // array. We need to do this since the id must be first the
-        // arguments array of the new transaction constructor
+        // Set the id as the last item of the transactionData
+        // array. We need to do this since the id must be last
+        // element of the arguments array for the new transaction
+        // constructor
         transactionData.push(activeId);
 
         // Save the active transaction reference value in activeTransaction,
-        // wo that we can update it in the next step
+        // so that we can update it in the next step
         var activeTransaction = transactions.find(function (transaction) {
             return transaction.id == activeId;
         });
@@ -497,4 +510,137 @@ function resetInputs() {
     inputAmount.value = '';
     inputDate.value = today;
 
+    resetValidationStyling();
+
+}
+
+// Function that validates inputs: returns true if all inputs values are valid
+// otherweise, returns false
+function checkInputs() {
+
+    // Function returns this value in order to signal whether inputs
+    // are valid or not. Set to true by default, but if a validation
+    // on an imput fails, it is set to false and prevents the transaction
+    // from being added/edited
+    var allValid = true;
+
+    // Description element and value
+    var inputDescription = document.getElementById('description');
+    var descriptionValue = inputDescription.value.trim();
+    // Amount element and value
+    var inputAmount = document.getElementById('amount');
+    var amountValue = inputAmount.value.trim();
+    // Date element and value
+    var inputDate = document.getElementById('date');
+    var dateValue = inputDate.value.trim();
+    // Radio buttons
+    var radioInputs = document.querySelectorAll('input[type=radio]');
+
+    // Check validity of description
+    if (descriptionValue === '') {
+
+        showErrorOn(inputDescription, 'Description cannot be empty');
+        allValid = false;
+
+    } else if (descriptionValue.length > 25) {
+
+        showErrorOn(inputDescription, 'Description must be less than 25 characters');
+        allValid = false;
+
+    } else {
+
+        showSuccessOn(inputDescription);
+
+    }
+
+    // Check validity of the amount
+    if (amountValue === '') {
+
+        showErrorOn(inputAmount, 'Amount cannot be empty');
+        allValid = false;
+
+    } else if (!Number(amountValue)) {
+
+        showErrorOn(inputAmount, 'Amount must be a number');
+        allValid = false;
+
+    } else if (amountValue.startsWith('-', 0)) {
+
+        showErrorOn(inputAmount, 'Amount must be positive');
+        allValid = false;
+
+    }
+
+    else {
+
+        showSuccessOn(inputAmount);
+
+    }
+
+    // Check validity of date
+    if (dateValue === '') {
+
+        showErrorOn(inputDate, 'Date cannot be empty')
+        allValid = false;
+
+    } else if (Number(dateValue.slice(0, 4)) < 2000) {
+
+        showErrorOn(inputDate, 'Add a transaction from recent history :)')
+        allValid = false;
+
+    } else {
+
+        showSuccessOn(inputDate);
+
+    }
+
+    // Check if at least one radio is checked: expense category is
+    // checked by default, but in case the user manipulates the DOM
+    // we check here if at least one of the radios is checked
+    if (radioInputs[0].checked || radioInputs[1].checked) {
+
+        // Do nothing
+
+    } else {
+
+        // We will use one element to target the parent container
+        showErrorOn(radioInputs[0], 'Pick category');
+        allValid = false;
+
+    }
+
+    return allValid;
+
+}
+
+function showSuccessOn(input) {
+
+    var parentElement = input.parentElement // .form__group
+    parentElement.className = 'form__group success';
+
+}
+
+function showErrorOn(input, message) {
+
+    var parentElement = input.parentElement; // .form__group
+    var errorElement = parentElement.querySelector('.form__error-message');
+    parentElement.className = 'form__group error';
+    errorElement.textContent = message;
+
+}
+
+function resetValidationStyling() {
+
+    var formGroups = document.querySelectorAll('.form__group');
+    formGroups.forEach(function removeValidationStyles(formGroup) {
+
+        if (formGroup.classList.contains('error')) formGroup.classList.remove('error');
+        else if (formGroup.classList.contains('success')) formGroup.classList.remove('success');
+
+    })
+
+}
+
+function setValidityFlagToFalse(flag) {
+    if (flag === true) flag = false;
 }

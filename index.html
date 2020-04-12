@@ -68,23 +68,27 @@
                         <div class="form__group">
                             <label for="description" class="form__label">Description</label>
                             <input type="text" class="form__input" id="description" name="description" placeholder="e.g. Groceries" required>
+                            <small class="form__error-message">Error message</small>
                         </div>
 
-                        <div class="form__group">
+                        <div class="form__group radios">
                             <input type="radio" class="form__input-radio" name="transactionCategory" id="expense" value="expense" checked>
                             <label for="expense" class="form__label-radio">Expense</label>
                             <input type="radio" class="form__input-radio" name="transactionCategory" id="income" value="income">
                             <label for="income" class="form__label-radio">Income</label>
+                            <small class="form__error-message">Error message</small>
                         </div>
 
                         <div class="form__group">
                             <label for="amount" class="form__label">Amount</label>
                             <input type="number" class="form__input" id="amount" name="amount" placeholder="e.g. 500" min="0" required>
+                            <small class="form__error-message">Error message</small>
                         </div>
 
                         <div class="form__group">
                             <label for="date" class="form__label">Date</label>
                             <input type="date" id="date" name="date" class="form__input" required>
+                            <small class="form__error-message">Error message</small>
                         </div>
 
                         <div class="form__group form__buttons">

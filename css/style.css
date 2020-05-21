@@ -11,7 +11,7 @@
   --color-white: #fff;
   --color-black: #000;
   --color-grey: #999;
-  --color-button-purple: #6647ff;
+  --color-purple: #6647ff;
 
   --font-primary: "Roboto", "sans-serif";
   --font-logo: "Pacifico", "sans-serif";
@@ -60,8 +60,8 @@ body {
 .heading-secondary {
   font-size: 2rem;
   text-transform: uppercase;
-  padding: 0 0 1rem;
   border-bottom: 1px solid #bbb;
+  padding-bottom: 1rem;
 }
 
 /******************************************************************************
@@ -154,7 +154,37 @@ body {
 ******************************************************************************/
 
 .activity {
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-transaction__btn {
+  display: flex;
+  position: sticky;
+  bottom: 2rem;
+  cursor: pointer;
+  /* bottom: 2rem; */
+  /* left: 22rem; */
+  z-index: 100;
+  margin-left: auto;
+  margin-top: 2rem;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  text-decoration: none;
+  background: var(--color-purple);
+  padding: 2rem;
+  border-radius: 50%;
+}
+
+.add-transaction__btn span {
+  font-size: 4rem;
+  color: var(--color-white);
+  transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.add-transaction__btn:hover span {
+  transform: rotate(180deg);
 }
 
 .transactions-list {
@@ -337,7 +367,7 @@ body {
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 50%;
-  border: 3px solid var(--color-button-purple);
+  border: 3px solid var(--color-purple);
 }
 
 .form__custom-radio::before {
@@ -355,7 +385,7 @@ body {
 }
 
 .form__input-radio:checked + .form__label-radio .form__custom-radio::before {
-  background-color: var(--color-button-purple);
+  background-color: var(--color-purple);
 }
 
 /* Custom radio buttons end */
@@ -378,7 +408,7 @@ body {
   text-transform: uppercase;
   color: var(--color-white);
   padding: 1rem 1.5rem;
-  background: var(--color-button-purple);
+  background: var(--color-purple);
   border-radius: 3px;
   margin-left: 2rem;
   transition: all 0.2s;
@@ -397,33 +427,6 @@ body {
 
 .btn:active {
   transform: translateY(1px);
-}
-
-.new-transaction__btn {
-  display: flex;
-  position: fixed;
-  cursor: pointer;
-  bottom: 2rem;
-  left: 22rem;
-  margin-left: auto;
-  align-items: center;
-  justify-content: center;
-  width: 5rem;
-  height: 5rem;
-  text-decoration: none;
-  background: var(--color-button-purple);
-  padding: 2rem;
-  border-radius: 50%;
-}
-
-.new-transaction__btn span {
-  font-size: 4rem;
-  color: var(--color-white);
-  transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-}
-
-.new-transaction__btn:hover span {
-  transform: rotate(180deg);
 }
 
 /* Input Validation Styling */

@@ -37,6 +37,12 @@ html {
   font-size: 62.5%;
 }
 
+@media (min-width: 48rem) {
+  html {
+    font-size: 70%;
+  }
+}
+
 body {
   box-sizing: border-box;
   background: var(--color-background);
@@ -49,6 +55,12 @@ body {
   margin-right: auto;
   margin-left: auto;
   position: relative;
+}
+
+@media screen and (max-width: 25rem) {
+  .main {
+    padding: 0 2rem;
+  }
 }
 
 /******************************************************************************

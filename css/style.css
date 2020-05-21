@@ -317,6 +317,49 @@ body {
   margin-left: 1.5rem;
 }
 
+/* Custom radio buttons */
+
+.form__input-radio {
+  display: none;
+}
+
+.form__label-radio {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.form__custom-radio {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  margin-right: 0.5rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 3px solid var(--color-button-purple);
+}
+
+.form__custom-radio::before {
+  position: absolute;
+  content: "";
+  /* top: 50%; */
+  /* left: 50%; */
+  /* transform: translate(-50%, -50%); */
+  align-self: center;
+  display: block;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.form__input-radio:checked + .form__label-radio .form__custom-radio::before {
+  background-color: var(--color-button-purple);
+}
+
+/* Custom radio buttons end */
+
 .form__buttons {
   display: flex;
   justify-content: flex-end;

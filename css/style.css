@@ -204,6 +204,10 @@ body {
   position: relative;
 }
 
+.transactions-list__empty-message {
+  padding-top: 2rem;
+}
+
 .transaction {
   width: 100%;
   display: flex;

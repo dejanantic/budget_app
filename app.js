@@ -11,20 +11,20 @@ inputDate.value = today;
 
 // Array to store the transactions
 var transactions = [
-    {
-        id: 100,
-        desc: 'iPhone',
-        category: 'expense',
-        amount: 650,
-        date: '2020-02-15'
-    },
-    {
-        id: 99,
-        desc: 'Salary',
-        category: 'income',
-        amount: 2500,
-        date: '2020-02-24'
-    }
+    // {
+    //     id: 100,
+    //     desc: 'iPhone',
+    //     category: 'expense',
+    //     amount: 650,
+    //     date: '2020-02-15'
+    // },
+    // {
+    //     id: 99,
+    //     desc: 'Salary',
+    //     category: 'income',
+    //     amount: 2500,
+    //     date: '2020-02-24'
+    // }
 ];
 
 
@@ -33,16 +33,20 @@ document.addEventListener('DOMContentLoaded', function buildTransactions() {
 
     var transactionsList = document.querySelector('.js-transactions-list');
 
-    for (var i = 0; i < transactions.length; i++) {
-        var transaction = transactions[i];
-        var transactionHTML = buildTransactionHTML(transaction);
-        transactionsList.prepend(transactionHTML);
+    // Add a message if there are no transactions in the transactions array
+    if (transactions.length === 0) {
+        showEmptyMessage();
+    } else {
+        for (var i = 0; i < transactions.length; i++) {
+            var transaction = transactions[i];
+            var transactionHTML = buildTransactionHTML(transaction);
+            transactionsList.prepend(transactionHTML);
+        }
     }
 
     updateBalanceView(tallyNumbers);
 
 })
-
 
 // Toggle .js-active on transaction click, remove .js-active if click outside
 // transactionsList
@@ -158,6 +162,8 @@ form.addEventListener('formdata', function manipulateData(e) {
     var data = e.formData;
     var transactionsList = document.querySelector('.js-transactions-list');
     var transactionData = [];
+
+    // Populate the transactionsData array
     for (var item of data.values()) transactionData.push(item);
 
     if (form.dataset.editMode === 'true') {
@@ -191,6 +197,12 @@ form.addEventListener('formdata', function manipulateData(e) {
 
     } else {
 
+        // When adding a transaction, first check if it's the first transaction being
+        // added. If so, delete the empty message
+        if (isFirstTransaction()) {
+            deleteEmptyMessage();
+        }
+
         // We are adding a new transaction, add the code below
         var newTransaction = new Transaction(...transactionData);
 
@@ -220,6 +232,16 @@ form.addEventListener('reset', function discardForm(e) {
 
     toggleNewTransactionSection();
 
+})
+
+document.addEventListener('transaction-deleted', function () {
+    var transactionsList = document.querySelector('.js-transactions-list');
+
+    // If transactions list has transactions, do nothing
+    // Otherwise, display no transactions message
+    if (transactionsList.childElementCount) return;
+
+    showEmptyMessage();
 })
 
 
@@ -333,6 +355,7 @@ function deleteTransaction() {
     // operator to coerce the value to a number
     var transactionId = transaction.dataset.transactionId;
 
+
     // Remove transaction from the DOM
     transaction.remove();
 
@@ -344,16 +367,19 @@ function deleteTransaction() {
 
             var transactionIndex = transactions.indexOf(tr);
 
-            // I am mutating an array here -- not sure if that's ok
             transactions.splice(transactionIndex, 1);
 
         }
 
     }
 
+    // Let the application know that a transaction was deleted. We use this signal to
+    // check whether the last transaction was deleted from the list so that we can show
+    // the empty transaction list message
+    document.dispatchEvent(new CustomEvent('transaction-deleted', { bubbles: true }));
+
     // Update the balance view
     updateBalanceView(tallyNumbers);
-
 }
 
 // Edit transaction functionality
@@ -639,6 +665,26 @@ function resetValidationStyling() {
 
     })
 
+}
+
+function showEmptyMessage() {
+    const transactionsList = document.querySelector('.js-transactions-list');
+    const message = document.createElement('P');
+    message.className = 'transactions-list__empty-message js-empty-message';
+    message.textContent = 'No transactions! Add one?';
+    transactionsList.appendChild(message);
+}
+
+function isFirstTransaction() {
+    // If the empty message exists, it means that the transactions list is empty
+    // The expression evaluates to null if the element doesn't exist
+    return document.querySelector('.js-empty-message') ? true : false;
+}
+
+function deleteEmptyMessage() {
+    var message = document.querySelector('.js-empty-message');
+
+    message.remove();
 }
 
 function setValidityFlagToFalse(flag) {

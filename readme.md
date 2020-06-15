@@ -8,7 +8,7 @@ Simple web app that gives you an overview of your monthly expenses and incomes. 
 
 > CSS
 
-> Vanilla JS.
+> Vanilla JS
 
 ### Possible future features:
 
@@ -17,3 +17,7 @@ Simple web app that gives you an overview of your monthly expenses and incomes. 
 > Transactions grouped by month
 
 > Transaction filtering
+
+### App demo
+
+Deployed with GitHub Pages - [Budget App Demo](https://dejanantic.github.io/budget_app/)

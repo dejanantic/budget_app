@@ -1,31 +1,5 @@
-/*****************************************************************************/
-/**********************   FUNCTIONALITY AND STUFF   **************************/
-/*****************************************************************************/
-
-// This can be a function since I use it all the time
-// Set the value of the date input to today's date
-var inputDate = document.querySelector('#date');
-var today = new Date().toISOString().slice(0, 10);
-inputDate.value = today;
-
-
 // Array to store the transactions
-var transactions = [
-    // {
-    //     id: 100,
-    //     desc: 'iPhone',
-    //     category: 'expense',
-    //     amount: 650,
-    //     date: '2020-02-15'
-    // },
-    // {
-    //     id: 99,
-    //     desc: 'Salary',
-    //     category: 'income',
-    //     amount: 2500,
-    //     date: '2020-02-24'
-    // }
-];
+var transactions = [];
 
 
 // On DOMContentLoad populate the transaction-list with array items
@@ -99,7 +73,7 @@ newTransactionButton.addEventListener('click', function makeNewTransactionSectio
     toggleNewTransactionSection();
 
     // Set the input's value to today if empty
-    if (!inputDate.value) inputDate.value = today;
+    if (!inputDate.value) setToday();
 
 })
 
@@ -197,18 +171,15 @@ form.addEventListener('formdata', function manipulateData(e) {
 
     } else {
 
-        // When adding a transaction, first check if it's the first transaction being
-        // added. If so, delete the empty message
+        // Delete empty message if adding first transaction
         if (isFirstTransaction()) {
             deleteEmptyMessage();
         }
 
-        // We are adding a new transaction, add the code below
         var newTransaction = new Transaction(...transactionData);
 
         // Put the new transaction at the beginning of the transactions array
         transactions.unshift(newTransaction);
-        console.log(transactions);
 
         // Get the new transaction's HTML
         var newTransactionHTML = buildTransactionHTML(newTransaction);
@@ -249,6 +220,13 @@ document.addEventListener('transaction-deleted', function () {
 /***********************   FUNCTION DECLARATIONS   ***************************/
 /*****************************************************************************/
 
+// Set the value of the date input to today's date
+var inputDate = document.querySelector('#date');
+function setToday() {
+    var today = new Date().toISOString().slice(0, 10);
+    inputDate.value = today;
+}
+
 // Format input date
 function formatDate(transactionDate) {
     transactionDate = transactionDate.split('-');
@@ -267,7 +245,6 @@ function reverseFormatDate(date) {
 }
 
 // Create new transaction ID
-// Milos: mogo bi upotrebit closure da zastitim idCounter
 var idCounter = 0;
 function createTransactionId() {
     return ++idCounter;
@@ -486,10 +463,9 @@ function removeJsActiveAll() {
 }
 
 // If we are editing a transaction, we should pass two arguments in order to
-// update the form's dataset properties
+// update the form's dataset properties:
 // 1) 'true' if we are editing a transaction
 // 2) the id of the transaction we are editing
-// Note: I should probably rename this function TK
 function toggleNewTransactionSection(editMode = false, activeId = null) {
 
     var newTransactionSection = document.getElementById('new-transaction');
@@ -534,7 +510,7 @@ function resetInputs() {
     inputDescription.value = '';
     inputRadioExpense.checked = true;
     inputAmount.value = '';
-    inputDate.value = today;
+    setToday();
 
     resetValidationStyling();
 
@@ -626,6 +602,7 @@ function checkInputs() {
     if (radioInputs[0].checked || radioInputs[1].checked) {
 
         // Do nothing
+        return;
 
     } else {
 
@@ -685,8 +662,4 @@ function deleteEmptyMessage() {
     var message = document.querySelector('.js-empty-message');
 
     message.remove();
-}
-
-function setValidityFlagToFalse(flag) {
-    if (flag === true) flag = false;
 }

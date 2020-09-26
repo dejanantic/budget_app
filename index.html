@@ -1,115 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Budget App - Keeping you atop of your personal finances</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap" rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<body>
+  <body>
     <section class="container">
+      <nav class="nav">
+        <h1 class="logo">Budget App</h1>
+      </nav>
 
-        <nav class="nav">
+      <main class="main">
+        <!-- Monthly overview -->
+        <section class="overview">
+          <h2 class="heading-secondary heading-secondary--overview">
+            Your balance
+          </h2>
 
-            <h1 class="logo">Budget App</h1>
+          <h1 id="balance" class="overview__balance">
+            <span class="overview__number js-overview__number">1849.70</span
+            ><span class="overview__currency">&euro;</span>
+          </h1>
 
-        </nav>
-
-        <main class="main">
-
-            <!-- Monthly overview -->
-            <section class="overview">
-
-                <h2 class="heading-secondary heading-secondary--overview">Your balance</h2>
-
-                <h1 id="balance" class="overview__balance"><span class="overview__number js-overview__number">1849.70</span><span class="overview__currency">&euro;</span></h1>
-
-                <div class="overview__breakdown">
-
-                    <div class="overview__income">
-                        <h3 class="overview__income-heading">Income</h3>
-                        <p id="income-total" class="overview__income-amount">
-                            <span class="overview__number js-overview__number">2500</span><span class="overview__currency">&euro;</span>
-                        </p>
-                    </div>
-
-                    <div class="overview__expense">
-                        <h3 class="overview__expense-heading">Expenses</h3>
-                        <p id="expense-total" class="overview__expense-amount">
-                            <span class="overview__number js-overview__number">650</span><span class="overview__currency">&euro;</span>
-                        </p>
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- Activity section -->
-            <section class="activity">
-
-                <h2 class="heading-secondary">Activity</h2>
-
-                <!-- Transaction list here -->
-                <ul class="transactions-list js-transactions-list">
-                </ul>
-
-                <a class="add-transaction__btn js-new-transaction__btn"><span>&plus;</span></a>
-            </section>
-
-            <div class="new-transaction js-new-transaction" id="new-transaction">
-
-                <div class="new-transaction__content">
-
-                    <form action="#" class="form js-form" data-edit-mode="false" data-active-transaction-id="null" novalidate>
-
-                        <h3 class="heading-secondary">Add new transaction</h3>
-
-                        <div class="form__group">
-                            <label for="description" class="form__label">Description</label>
-                            <input type="text" class="form__input" id="description" name="description" placeholder="e.g. Groceries" required>
-                            <small class="form__error-message">Error message</small>
-                        </div>
-
-                        <div class="form__group radios">
-                            <input type="radio" class="form__input-radio" name="transactionCategory" id="expense" value="expense" checked>
-                            <label for="expense" class="form__label-radio"><span class="form__custom-radio"></span>Expense</label>
-                            <input type="radio" class="form__input-radio" name="transactionCategory" id="income" value="income">
-                            <label for="income" class="form__label-radio"><span class="form__custom-radio"></span>Income</label>
-                            <small class="form__error-message">Error message</small>
-                        </div>
-
-                        <div class="form__group">
-                            <label for="amount" class="form__label">Amount</label>
-                            <input type="number" class="form__input" id="amount" name="amount" placeholder="e.g. 500" min="0" required>
-                            <small class="form__error-message">Error message</small>
-                        </div>
-
-                        <div class="form__group">
-                            <label for="date" class="form__label">Date</label>
-                            <input type="date" id="date" name="date" class="form__input" required>
-                            <small class="form__error-message">Error message</small>
-                        </div>
-
-                        <div class="form__group form__buttons">
-                            <button type="reset" href="#" class="btn btn--discard">Discard</button>
-                            <button href="#" type="submit" class="btn">Add transaction</button>
-                        </div>
-
-                    </form>
-
-                </div>
-
+          <div class="overview__breakdown">
+            <div class="overview__income">
+              <h3 class="overview__income-heading">Income</h3>
+              <p id="income-total" class="overview__income-amount">
+                <span class="overview__number js-overview__number">2500</span
+                ><span class="overview__currency">&euro;</span>
+              </p>
             </div>
 
+            <div class="overview__expense">
+              <h3 class="overview__expense-heading">Expenses</h3>
+              <p id="expense-total" class="overview__expense-amount">
+                <span class="overview__number js-overview__number">650</span
+                ><span class="overview__currency">&euro;</span>
+              </p>
+            </div>
+          </div>
+        </section>
 
-        </main>
+        <!-- Activity section -->
+        <section class="activity">
+          <h2 class="heading-secondary">Activity</h2>
 
+          <!-- Transaction list here -->
+          <ul class="transactions-list js-transactions-list"></ul>
+
+          <a class="add-transaction__btn js-new-transaction__btn"
+            ><span>&plus;</span></a
+          >
+        </section>
+
+        <div class="new-transaction js-new-transaction" id="new-transaction">
+          <div class="new-transaction__content">
+            <form
+              action="#"
+              class="form js-form"
+              data-edit-mode="false"
+              data-active-transaction-id="null"
+              novalidate
+            >
+              <h3 class="heading-secondary">Add new transaction</h3>
+
+              <div class="form__group">
+                <label for="description" class="form__label">Description</label>
+                <input
+                  type="text"
+                  class="form__input"
+                  id="description"
+                  name="description"
+                  placeholder="e.g. Groceries"
+                  required
+                />
+                <small class="form__error-message">Error message</small>
+              </div>
+
+              <div class="form__group radios">
+                <input
+                  type="radio"
+                  class="form__input-radio"
+                  name="transactionCategory"
+                  id="expense"
+                  value="expense"
+                  checked
+                />
+                <label for="expense" class="form__label-radio"
+                  ><span class="form__custom-radio"></span>Expense</label
+                >
+                <input
+                  type="radio"
+                  class="form__input-radio"
+                  name="transactionCategory"
+                  id="income"
+                  value="income"
+                />
+                <label for="income" class="form__label-radio"
+                  ><span class="form__custom-radio"></span>Income</label
+                >
+                <small class="form__error-message">Error message</small>
+              </div>
+
+              <div class="form__group">
+                <label for="amount" class="form__label">Amount</label>
+                <input
+                  type="number"
+                  class="form__input"
+                  id="amount"
+                  name="amount"
+                  placeholder="e.g. 500"
+                  min="0"
+                  required
+                />
+                <small class="form__error-message">Error message</small>
+              </div>
+
+              <div class="form__group">
+                <label for="date" class="form__label">Date</label>
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  class="form__input"
+                  required
+                />
+                <small class="form__error-message">Error message</small>
+              </div>
+
+              <div class="form__group form__buttons">
+                <button type="reset" href="#" class="btn btn--discard">
+                  Discard
+                </button>
+                <button href="#" type="submit" class="btn">
+                  Add transaction
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
     </section>
 
     <script src="./app.js"></script>
-</body>
-
+  </body>
 </html>
